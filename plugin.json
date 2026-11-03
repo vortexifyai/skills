@@ -1,0 +1,22 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "vortexify",
+  "version": "0.1.0",
+  "repository": "https://github.com/vortexifyai/skills",
+  "description": "Build Vortexify projects, connectors, syncs, and React applications using the CLI and SDKs.",
+  "author": {
+    "name": "Vortexify"
+  },
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Vortexify",
+        "shortDescription": "Build apps with Vortexify",
+        "longDescription": "Coding-agent workflows for Vortexify projects, source connectors and syncs, and React applications. Uses a separately installed and authenticated Vortexify CLI.",
+        "developerName": "Vortexify",
+        "category": "Developer Tools",
+        "capabilities": []
+      }
+    }
+  }
+}

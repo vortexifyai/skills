@@ -1,0 +1,12 @@
+{
+  "name": "vortexify-tools",
+  "interface": {"displayName": "Vortexify Tools"},
+  "plugins": [
+    {
+      "name": "vortexify",
+      "source": {"source": "local", "path": "./"},
+      "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+      "category": "Developer Tools"
+    }
+  ]
+}

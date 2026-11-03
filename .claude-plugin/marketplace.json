@@ -1,0 +1,7 @@
+{
+  "name": "vortexify-tools",
+  "owner": {"name": "Vortexify"},
+  "plugins": [
+    {"name": "vortexify", "source": "./", "description": "Coding-agent workflows for Vortexify projects, connectors, and apps."}
+  ]
+}
