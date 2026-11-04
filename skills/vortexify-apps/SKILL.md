@@ -17,7 +17,7 @@ For agent-generated charts, consume the `generate_chart` tool result's `chart` o
 
 Keep secrets and long-lived credentials out of source and Vite environment variables. Local authentication comes from the CLI proxy; published apps receive runtime authentication from the app shell. The shared Clerk login and iframe wrapper belong to `vortexify-runtime/app-shell`, rather than each app's implementation.
 
-Edit `package.json` to declare dependencies. For local preview, install dependencies in the app and run:
+Edit `package.json` to declare dependencies. The current starter targets `@vortexify/react@0.1.1`; update existing apps with `npm install --save-exact @vortexify/react@0.1.1` and commit the lockfile. Display the SDK error message: server failures such as an unprepared API runtime retain their explanation and HTTP status. For local preview, install dependencies in the app and run:
 
 ```sh
 vortexify dev dashboard

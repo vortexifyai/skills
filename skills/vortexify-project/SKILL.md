@@ -9,7 +9,7 @@ Read [reference locations](references/locations.md) for CLI, SDK, and template a
 
 ## Establish context
 
-Find the nearest `vortexify.project.yaml`; its paths map resource types to local folders. Run `vortexify status` before planning commits to inspect registration, local/server drift, upstream requirements, and downstream impact. Use `vortexify registry` for registered server resources. Read relevant local code and saved plans before creating replacements.
+Find the nearest `vortexify.project.yaml`; its paths map resource types to local folders. Run `vortexify status` before planning commits to inspect registration, local/server drift, upstream requirements, and downstream impact. Use `vortexify registry` for registered server resources. `VORTEXIFY_ORG_ID` supplies the default organization; `--org-id` overrides it. Read relevant local code and saved plans before creating replacements.
 
 Connectors access external systems; syncs publish datasets; transforms process datasets; APIs expose request/response operations; databases store transactional state; agents use context and tools; React apps consume platform resources. Prefer extending an existing resource when its responsibility fits.
 
@@ -106,7 +106,7 @@ interpretation in the relevant entity document. Ask whether they mean planned
 usage or actual consumption when that distinction matters to the current work;
 incorporate the answer without replacing existing business explanations.
 
-`vortexify init` creates these files. For an existing project, use `vortexify context init`. Full `pull`, `commit`, and `status` include both collections; resource-filtered operations affect source only. `context pull`, `context push`, and `context status` operate on collections independently. Concurrent edits are rejected; inspect both versions and reconcile before saving. `context versions <collection>` lists snapshots; `context read <collection> <path>` reads server content.
+`vortexify init` creates these files. For an existing project, use `vortexify context init`. Full `pull`, `commit`, and `status` include both collections; resource-filtered operations affect source only. `context pull`, `context push`, and `context status` operate on collections independently. Concurrent edits are rejected. If both local and server files changed, use `vortexify context pull --backup-local` to archive the conflicting local collection in `.vortexify/backups/*.tar.gz` and pull the server version. Extract the archive elsewhere, reconcile your edits into the pulled files, then run `vortexify context push`. Ordinary pull preserves conflicting local files and refuses to overwrite them. `context versions <collection>` lists snapshots; `context read <collection> <path>` reads server content.
 
 Use `vortexify tables`, `vortexify table <name-or-id>`, `registry`, and the local source to inspect resources directly. There is no CLI manager conversation. For read-only SQL on published outputs:
 
@@ -126,7 +126,7 @@ Use `blueprints list` only for attachments; search the full catalog with `bluepr
 
 Review upstream inputs and affected downstream resources, including server-only resources. For a new workflow, agree on the resource flow before registration; existing approval covers the agreed scope. Keep relevant requirements, intended interfaces, decisions, assumptions and acceptance criteria in Context as the work evolves. Inspect source and platform metadata for current schemas instead of copying them into plans. Capture business learning in Knowledge Base when appropriate.
 
-Implement against current SDK references. Source-declared inputs are authoritative and are validated at commit; manual graph edits cannot override conflicting declarations. Transforms can return one table or a dictionary of named tables. Keep consumer references consistent with the selected output names. Do not infer output table availability from resource registration alone.
+Implement against current SDK references. Source-declared inputs are authoritative and are validated at commit; manual graph edits cannot override conflicting declarations. Transforms can return one table or a dictionary of named tables. Keep consumer references consistent with the selected output names. Use `Table("_upload.customers")` for a published uploaded table named `customers`; `_upload` is reserved and cannot name a connector. Use `Table("connector.sync")` for synced data. Do not create a mock connector just to consume an upload. Do not infer output table availability from resource registration alone.
 
 ## Register, commit, and verify
 
@@ -136,7 +136,11 @@ vortexify status --type transform --resource daily_revenue
 vortexify commit --type transform --resource daily_revenue
 ```
 
-Use `create <type> <name>` to register a resource and obtain its starter; it preserves an existing local implementation. Create a sync with its qualified name, such as `vortexify create sync shop/orders`; `--connector` is also supported for an unqualified sync name. Commit selected resources upstream-first; `vortexify commit` orders changed resources in its selection and validates their references. A broad commit selects all managed resources, so choose the scope intentionally.
+Use `create <type> <name>` to register a resource and obtain its starter; it preserves an existing local implementation. Create a sync with its qualified name, such as `vortexify create sync shop/orders`; `--connector` is also supported for an unqualified sync name. Commit selected resources upstream-first; `vortexify commit` orders changed resources in its selection and validates their references. A broad commit selects all managed resources, so choose the scope intentionally. Committing sync/database input references requires committed producers, not materialized output: consumers can commit while upstream runs or migrations are pending, running, or failed. TransformOutput also requires committed producer source. Sync-based trigger schedules can commit before the sync publishes a table. Execution still requires the referenced published data or database schema. Uploaded-table references require an existing uploaded table because there is no separately committed producer resource.
+
+If registration succeeds but starter download or verification fails, use `vortexify create <type> <name> --resume` to recover its source without registering another resource. Resume requires an existing registration and a missing local resource folder; it preserves existing local implementations.
+
+Database commits report required migration approval. Approval and successful migration are separate: inspect the job result, and after a failed migration, `vortexify database NAME --approve VERSION` submits a new job.
 
 Downstream impact is informational, not permission to edit or deploy those resources. Pull only what is needed and inspect conflicts rather than overwrite local changes. Registration, committed source, deployed version, and completed execution are distinct states. Validate relevant behavior and report which states actually changed; a successful commit is not a deployment or a successful run.
 

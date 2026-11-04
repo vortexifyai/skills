@@ -27,6 +27,8 @@ Keep access/authentication in the connector and dataset-specific extraction in s
 
 Syncs yield Pandas DataFrames. Implement preview independently from extraction using the current SDK contract; preview must not consume a production checkpoint. Incremental output is appended by the runtime, so design cursors deliberately and use downstream transforms for deduplication when required. The platform persists checkpoints after durable data writes. Sync schedules are cron-only.
 
+Pin `vortexify==0.1.1` in `requirements.in`. `_upload` is reserved and cannot name a connector. Uploaded tables can be consumed directly through `Table("_upload.table_name")`; do not create a connector for already uploaded data.
+
 Register a connector before creating its syncs:
 
 ```sh
