@@ -15,9 +15,9 @@ Use the current React SDK's `VortexifyProvider` and configuration helpers. Apps 
 
 For agent-generated charts, consume the `generate_chart` tool result's `chart` object (`query_id`, `name`, `config`, `row_count`). Fetch its stored JSON rows with `client.getAnalysisData(chart.query_id)` and render using the app's chart library. Chart generation references a completed analysis; it does not execute SQL again or render the chart. Treat these backend tool results separately from frontend actions.
 
-Keep secrets and long-lived credentials out of source and Vite environment variables. Local authentication comes from the CLI proxy; published apps receive runtime authentication from the app shell. The shared Clerk login and iframe wrapper belong to `vortexify-runtime/app-shell`, rather than each app's implementation.
+Keep secrets and long-lived credentials out of source and Vite environment variables. Use the CLI proxy for local authentication and the hosted app shell for published apps. Do not add a separate login provider inside the app.
 
-Edit `package.json` to declare dependencies. The current starter targets `@vortexify/react@0.1.2`; update existing apps with `npm install --save-exact @vortexify/react@0.1.2` and commit the lockfile. Display the SDK error message: server failures such as an unprepared API runtime retain their explanation and HTTP status. For local preview, install dependencies in the app and run:
+Declare dependencies in `package.json` and commit the lockfile. Use the SDK dependency supplied by the app starter; to add it to an existing app, run `npm install --save-exact @vortexify/react`. Display actionable SDK errors in the interface. For local preview, install dependencies in the app and run:
 
 ```sh
 vortexify dev dashboard
@@ -25,7 +25,9 @@ vortexify dev dashboard
 
 Use the URL printed by the Vortexify CLI so SDK requests pass through its authenticated proxy. For platform builds, inspect returned job status, build logs and the preview_url. Run relevant local checks, then commit the intended app scope. Report build success separately from publication and functional verification.
 
-Before local preview, use `vortexify build api <name> --wait` to prepare each API and `vortexify run transform <name> --wait` (or `run sync`) to publish required project tables. `vortexify build app <name> --wait` checks the committed app artifact; inspect logs using its job ID. Preview schedules do not run. Stale preview outputs remain usable until rebuilt; deployed apps keep their selected code versions and consume outputs of deployed producer versions. Tables retain one ID with separate output snapshots per job; checkpoints are isolated by producer version. Every successful table publication runs PK/relationship discovery; manual runs do not fire scheduled triggers. Use explicit `deploy --version` or `upgrade` when publication is authorized.
+Before local preview, prepare each API with `vortexify build api <name> --wait` and publish required table data with `vortexify run transform <name> --wait` or `run sync`. Use `vortexify build app <name> --wait` to build the committed app and inspect its job results and preview link.
+
+Preview and deployed apps use separate data publications. New preview runs do not update deployed resources or activate production schedules. Use explicit `deploy --version` or `upgrade` when publication is authorized. Automatic key and relationship discovery applies to sync datasets and uploaded tables; inspect the findings relevant to a planned join.
 
 ## Application specifications and designs
 

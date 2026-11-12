@@ -6,10 +6,10 @@ The Vortexify skills plugin works with Codex and Claude Code. It helps your codi
 
 ## Changelog
 
-### Unreleased (planned v0.1.3)
+### v0.1.3
 
-- Correct React guidance to the current published 0.1.2 starter dependency; the public API response contract requires the upcoming 0.1.3 SDK before server rollout.
-- Explain immutable committed-version mock tests, explicit mocks and the distinction from live preview integration checks.
+- Clarify React SDK dependency setup and API error handling.
+- Explain saved-version mock tests, explicit mock inputs and preview integration checks.
 - Document guardian readiness, first commits, database transaction ownership and automatic output validation for transforms only.
 
 ### v0.1.2
