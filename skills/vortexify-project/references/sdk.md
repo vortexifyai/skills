@@ -2,7 +2,7 @@
 
 Read only the section relevant to the current resource. Inspect the project's installed SDK version/source for additional interfaces rather than guessing a signature.
 
-Use `vortexify==0.1.1` in Python `requirements.in`, matching the SDK installed in platform base images. Add only the resource's additional third-party dependencies. The current React app starter targets `@vortexify/react@0.1.1`; update existing apps and their lockfiles to that release for HTTP error messages.
+Use `vortexify==0.1.1` in Python `requirements.in`, matching the SDK installed in platform base images. Add only the resource's additional third-party dependencies. The current React app starter targets `@vortexify/react@0.1.2`; update existing apps and their lockfiles to that release for HTTP error messages.
 
 ## Python connectors and syncs
 
@@ -19,6 +19,16 @@ Use `@vxfy_transform` for tabular work and `@vxfy_api` for request/response oper
 `Agent` declares a custom app agent with a prompt, table/transform context, `ApiRunner` backend tools, and optional `AgentCapabilities`. Uploaded documentation is a platform attachment rather than a Python context declaration. Use `vortexify upload file PATH --resource-type agent --resource NAME --wait` to attach it; custom agents can search their own saved attachments. CLI `files` commands show bounded previews. The coding agent building the project is separate from these app agents.
 
 `Table("_upload.customers")` references an uploaded table named `customers` in function inputs or agent context. `_upload` is reserved and cannot be a connector name. These use the same DataFrame/DuckDB input behavior as synced tables. Source commits require committed sync/database/transform producers, not completed executions; data must be published before a consumer runs. Sync trigger schedules can also commit before materialization. Uploaded references need an existing table.
+
+Use `vortexify test api NAME --wait` or `vortexify test transform NAME --wait` after committing changes. These are server-side SDK mock tests: the platform runs the selected immutable committed source, including its tests and mock factories, with its selected dependency image and records the job/results against that resource version. This keeps platform verification tied to saved code and its runtime rather than uncommitted edits or a developer's Python environment. `--version N` selects a specific committed version. Local `vortexify.testing.run_tests(...)` is useful for quick feedback, but does not submit a platform test job or establish that the committed version passes on the server.
+
+Supply explicit mocks for resource inputs; missing required mocks are errors, never a fallback to live tables, secrets or preview databases. The runner checks input names, required values, scalar types and supported mock objects before invoking the resource. It does not validate table columns or business correctness automatically: tests must assert those contracts. Mock factories provide repeatable scenarios without depending on changing live data. No CSV fixtures or preview database seeds are generated automatically. Use `vortexify run` separately for integration checks against real preview inputs; a passing mock test does not prove database permissions, data availability or deployed behavior.
+
+New resources start as uncommitted starter baselines; commit before building or executing them. The first explicit commit creates version 1, even when the starter is unchanged. For `PROJECT_GUARDIAN_NOT_READY`, use `vortexify guardian --wait`; inspect failed activation before an editor retries with `--retry --wait`.
+
+Automatic `@vxfy_validate` output validation applies to transforms only. Neither preview nor deployed APIs invoke it automatically; put required checks in the API body or explicit tests. API validator declarations produce a non-blocking commit warning.
+
+`Database` inputs resolve to scoped psycopg2 connections. Use cursors with `%s` value placeholders and separate parameters. Autocommit is off; the runtime commits read/write connections after successful function/output processing and closes them on exit. Roll back after a caught SQL error before reusing the connection. Manual commits cannot be undone by later runtime failures. Preview uses preview databases without falling back to origin; mocks own their supplied connections.
 
 ## React
 
