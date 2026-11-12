@@ -81,9 +81,18 @@ are required.
 Prefer updating existing documents. Split large or distinct topics, merge overlap,
 and remove obsolete plans and superseded designs while preserving unrelated knowledge.
 Keep the smallest useful collection of accurate knowledge and development artifacts.
-Maintain ordinary relative Markdown links when files are added, moved or deleted.
-Consult vortexify.project.yaml for resource paths and resolve links from the actual
-document location, including .vortexify/, rather than from the collection root.
+Maintain relative Markdown links BETWEEN documents when files are added, moved or
+deleted. Resolve them from the actual document location, including .vortexify/.
+For registered resources, use portable canonical Markdown links instead of local
+source paths: copy `resource_reference` from `vortexify registry --json` or
+`vortexify tables --json`, for example
+`[Plants](vortexify://table/sync/mes/plants)` or
+`[Forecast](vortexify://transform/forecast)`. Never derive a table link from its
+output name (`default`), a UUID, or local vortexify.project.yaml paths. If the
+reference is absent, report it rather than inventing one. Links resolve within
+the current project to its resource/table view; they do not pin a version or run
+anything. Missing or ambiguous targets produce an error. For the full convention
+and output examples, read [references/document-links.md](references/document-links.md).
 Links do not automatically synchronize their targets.
 
 Plans express intent; committed code and registered resources establish implemented

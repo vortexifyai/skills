@@ -4,6 +4,20 @@ Give your coding agent guidance for building Vortexify projects, data connectors
 
 The Vortexify skills plugin works with Codex and Claude Code. It helps your coding agent use the Vortexify CLI, follow SDK conventions, and work with your project's code and context.
 
+## Changelog
+
+### v0.1.2
+
+- Use relative Markdown links between project documents and canonical resource links for registered tables, transforms, APIs, apps, agents, connectors, syncs and databases.
+- Copy `resource_reference` from CLI registry/table output instead of constructing links from local workspace paths, UUIDs or output names such as `default`.
+- Add reference examples for default and named table outputs, and explain missing targets, ambiguous links and resource renames.
+- Align both plugin manifests with the release version. The v0.1.1 Git tag shipped with manifests still declaring 0.1.0.
+
+### v0.1.1
+
+- Document uploaded-table references, commits with pending producers, and collection conflict-recovery flows.
+- Update Python and React SDK pins to 0.1.1 and remove `Agent.name` guidance.
+
 ## Install
 
 With the Vortexify CLI and your coding tool installed, run the command for your tool:
