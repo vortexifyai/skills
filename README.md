@@ -6,6 +6,11 @@ The Vortexify skills plugin works with Codex and Claude Code. It helps your codi
 
 ## Changelog
 
+### v0.1.4
+
+- Clarify validator inputs for transforms with named outputs.
+- Use Python SDK 0.1.2 in resource requirements.
+
 ### v0.1.3
 
 - Clarify React SDK dependency setup and API error handling.

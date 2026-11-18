@@ -2,7 +2,7 @@
 
 Read only the section relevant to the current resource. Inspect the project's installed SDK version/source for additional interfaces rather than guessing a signature.
 
-Use `vortexify==0.1.1` in Python `requirements.in` and add the resource's third-party dependencies. For React, use the dependency supplied by the app starter or install `@vortexify/react` with `--save-exact` in an existing app. Commit dependency and lockfile changes together.
+Use `vortexify==0.1.2` in Python `requirements.in` and add the resource's third-party dependencies. For React, use the dependency supplied by the app starter or install `@vortexify/react` with `--save-exact` in an existing app. Commit dependency and lockfile changes together.
 
 ## Python connectors and syncs
 
@@ -26,7 +26,7 @@ Supply explicit mocks for resource inputs and assert expected columns and busine
 
 New resources start as uncommitted starter baselines; commit before building or executing them. The first explicit commit creates version 1, even when the starter is unchanged. For `PROJECT_GUARDIAN_NOT_READY`, use `vortexify guardian --wait`; inspect failed activation before an editor retries with `--retry --wait`.
 
-Use `@vxfy_validate` for automatic transform output validation. Implement required API checks in the API body or explicit tests; APIs do not run output validators automatically.
+Use `@vxfy_validate` for automatic transform output validation. Pandas and PySpark validators receive `output`: a DataFrame for one table, or a dictionary of DataFrames for named outputs (for example, `output["daily"]`). DuckDB validators receive `conn`, with tables registered as `output` or under their output names. Implement required API checks in the API body or explicit tests; APIs do not run output validators automatically.
 
 `Database` inputs resolve to scoped psycopg2 connections. Use cursors with `%s` value placeholders and separate parameters. Autocommit is off; the runtime commits read/write connections after successful function/output processing and closes them on exit. Roll back after a caught SQL error before reusing the connection. Manual commits cannot be undone by later runtime failures. Preview uses preview databases without falling back to origin; mocks own their supplied connections.
 
