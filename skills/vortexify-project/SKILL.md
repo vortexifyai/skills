@@ -13,6 +13,10 @@ Find the nearest `vortexify.project.yaml`; its paths map resource types to local
 
 Connectors access external systems; syncs publish datasets; transforms process datasets; APIs expose request/response operations; databases store transactional state; agents use context and tools; React apps consume platform resources. Prefer extending an existing resource when its responsibility fits.
 
+## Delete resources
+
+Use `vortexify delete TYPE NAME_OR_ID` for APIs, transforms, apps, agents, connectors, syncs, databases, and uploaded tables (`TYPE=table`). Canonical resource references also work; qualify sync names as `connector/sync` when needed. The command confirms before soft-deleting; `--yes` skips the prompt and `--json` prints the result. Deployed resources must be undeployed first. Deletion keeps local source files; remove those separately if requested.
+
 ## Shared project files
 
 Use these collections as a persistent, evolving understanding of the project and
@@ -168,7 +172,7 @@ vortexify deploy app dashboard --version 3 --wait
 vortexify upgrade app dashboard --wait
 ```
 
-`run` accepts API, transform, or sync; API/transform tests use `test`. Supply `--inputs-file` for runtime parameters and `--version` for a specific committed preview version. `build transform` only prepares dependencies, whereas `run transform` produces tables. Preview app builds compile and publish a preview URL. Deployed app publication remains a separate action. Use `--json` for machine-readable results; `--wait` polls existing work and never resubmits it. Inspect results, validation findings, output inventories, and logs; stopping a wait does not cancel execution.
+`run` accepts API, transform, or sync and defaults to preview. Add `--production` to run the deployed version against production inputs and origin databases; an explicit `--version` must match the deployed version. API/transform tests use `test`. Supply `--inputs-file` for runtime parameters and `--version` for a specific committed preview version. `build transform` only prepares dependencies, whereas `run transform` produces tables. Preview app builds compile and publish a preview URL. Deployed app publication remains a separate action. Use `--json` for machine-readable results; `--wait` polls existing work and never resubmits it. Inspect results, validation findings, output inventories, and logs; stopping a wait does not cancel execution.
 
 Preview schedules and production triggers do not apply. Explicitly run/build each required resource. New commits make preview outputs and downstream previews stale, while last successful outputs remain usable. `status` reports freshness against committed source and consumed execution snapshots; local edits are separate. `--rebuild-downstream` runs a persisted plan upstream-first and waits for schema publication before consumers. Downstream APIs prepare runtimes; they are not invoked automatically. Downstream runtime parameters must have defaults.
 

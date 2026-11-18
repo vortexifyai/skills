@@ -1,6 +1,6 @@
 {
   "name": "vortexify",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Build Vortexify projects, connectors, syncs, and React applications using the CLI and SDKs.",
   "author": {"name": "Vortexify"}
 }

@@ -6,6 +6,11 @@ The Vortexify skills plugin works with Codex and Claude Code. It helps your codi
 
 ## Changelog
 
+### v0.1.5
+
+- Document unified resource and uploaded-table deletion.
+- Explain production API, sync, and transform runs.
+
 ### v0.1.4
 
 - Clarify validator inputs for transforms with named outputs.
