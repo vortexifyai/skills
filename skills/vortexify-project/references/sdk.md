@@ -41,3 +41,12 @@ Wrap an app in `VortexifyProvider` with a stable `createVortexifyConfig(import.m
 - Chart tools return a saved query/chart description. Fetch rows using `client.getAnalysisData(queryId)` and render with the app's chart library.
 
 Use `vortexify dev APP` and its printed URL for authenticated local preview. Hosted apps use the platform shell. Keep credentials out of browser source and public environment variables. Prepare the necessary committed API runtimes and table outputs before testing app behavior. Preview builds, deployment, and actual functional verification are distinct steps.
+
+
+## Runtime compute
+
+Set API compute in the decorator, for example `@vxfy_api("/orders", compute=ApiCompute(memory=1024))`. For latency-sensitive APIs, 1 GiB is a recommended starting allocation; measure performance and adjust. Memory and temporary storage use MiB. Starter permits up to 2048 MiB memory and 4096 MiB temporary storage; Business permits 10240 MiB of each. These are maximums, not default allocations. Starter APIs can run for up to 5 minutes and Business APIs for up to 15 minutes.
+
+Use `TransformCompute(memory=..., cores=..., disk=...)` for Pandas/DuckDB transforms and syncs; use `TransformSparkCompute` for separate Spark driver/executor allocations. Transform allocations share organization CPU, memory and temporary disk capacity; Spark counts the driver, all executors and memory overhead together. Commit compute changes and deploy the saved version to apply them in production.
+
+API request rate is shared by the organization: 600 requests/minute on Starter and `max(600, 120 × active members)` on Business.
