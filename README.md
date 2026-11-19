@@ -6,6 +6,12 @@ The Vortexify skills plugin works with Codex and Claude Code. It helps your codi
 
 ## Changelog
 
+### v0.1.7
+
+- Explain application blueprints, implementation guides, use-case documentation, and how to identify the app using a project reference.
+- Link coding agents directly to public connector guides and SDK documentation.
+- Document the boolean `x-vortexify-secret` annotation for connector and sync configuration fields.
+
 ### v0.1.6
 
 - Explain runtime compute configuration, API plan limits, and shared request rates.
